@@ -51,10 +51,14 @@ void pulseEn(){
     _delay_ms(LCD_PULSE_DELAY_MS);
 }
 
-void printMsg(char *s){
+void printStr(char *s){
 	int i;
 	for(i=0;s[i]!='\0';i++)
 		writeData(s[i]);
+}
+
+void printCh(char c){
+	writeData(c);
 }
 
 void clearScreen(){
@@ -71,4 +75,24 @@ void showCursor(){
 }
 void blinkCursor(){
 	writeCommand(0x0F);
+}
+
+void printInt(int n){
+	if(n<0){
+		writeData('-');
+		n*=-1;
+	}
+	int x = 10000;
+	while(!(n/x)){
+		x/=10;
+		if(x==0){
+			writeData('0');
+			return;
+		}
+	}
+	while(x>0){
+		writeData('0'+n/x);
+		n = n%x;
+		x/=10;
+	}
 }
