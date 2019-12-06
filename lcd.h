@@ -15,4 +15,10 @@ void showCursor();
 void hideCursor();
 void blinkCursor();
 void clearScreen();
+void goHome();
+void reset();
+void moveToLine1();
+void moveToLine2();
+void moveToAddress(uint8_t add);
+void moveToXY(uint8_t x, uint8_t y);
 #endif

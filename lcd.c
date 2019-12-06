@@ -96,3 +96,22 @@ void printInt(int n){
 		x/=10;
 	}
 }
+
+void moveToLine1(){
+	writeCommand(0x80);
+}
+
+void moveToLine2(){
+	writeCommand(0xC0);
+}
+
+void moveToAddress(uint8_t add){
+	writeCommand(0x80 | add);
+}
+
+void moveToXY(uint8_t x, uint8_t y){
+	if(y)
+		writeCommand(0xC0 | x);
+	else
+		writeCommand(0x80 | x);
+}
