@@ -8,12 +8,13 @@ void initLCD(volatile uint8_t *port, int en, int rs){
     lcd_data_port = port;
     en_pin = en;
     rs_pin = rs;
+    _delay_ms(50);
     *lcd_data_port |=(1<<en_pin);
-	_delay_ms(50);
-    //Todo: Change these commands
-    writeCommand(0x32);
+    *lcd_data_port &= ~(1<<rs_pin);
+
+	writeCommand(0x32);
 	writeCommand(0x28);
-	writeCommand(0x01);
+	clearScreen();
 	writeCommand(0x0F);
 	writeCommand(0x06);
 }
@@ -32,6 +33,7 @@ void sendToLCD(uint8_t value, int mode){
     temp |= value<<4;  //Lower nibble
     *lcd_data_port = temp;
     pulseEn();
+    *lcd_data_port &= ~(1<<rs_pin);
 }
 
 void writeCommand(uint8_t cmd){
@@ -47,4 +49,26 @@ void pulseEn(){
     _delay_ms(LCD_PULSE_DELAY_MS);
     *lcd_data_port|=(1<<en_pin);
     _delay_ms(LCD_PULSE_DELAY_MS);
+}
+
+void printMsg(char *s){
+	int i;
+	for(i=0;s[i]!='\0';i++)
+		writeData(s[i]);
+}
+
+void clearScreen(){
+	writeCommand(0x01);
+	writeCommand(0x02);
+}
+
+void hideCursor(){
+	writeCommand(0x0C);
+}
+
+void showCursor(){
+	writeCommand(0x0E);
+}
+void blinkCursor(){
+	writeCommand(0x0F);
 }
